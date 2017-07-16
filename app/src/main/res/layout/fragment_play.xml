@@ -1,0 +1,122 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/orange"
+    tools:context="com.inigo.player.MainActivity$QuestionFragment">
+
+    <TextView
+        android:id="@+id/section_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/lblSongName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/songnamevoid"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/lblCurrentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currenttimevoid"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/separatorvoid"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/lblTotalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currenttimevoid"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+        <SeekBar
+            android:id="@+id/sekSong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressDrawable="@drawable/progressbar_style"
+            android:thumb="@drawable/seek_bar_thumb"
+            android:thumbOffset="8dip"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/orange"
+        android:gravity="center_vertical|center_horizontal" >
+
+        <Button
+            android:id="@+id/btnStop"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:onClick="onClick"
+            android:background="@drawable/stopbutton_style" />
+        <Button
+            android:id="@+id/btnAnterior"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:onClick="onClick"
+            android:layout_toRightOf="@id/btnStop"
+            android:background="@drawable/previousbutton_style" />
+        <Button
+            android:id="@+id/btnPlay"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:onClick="onClick"
+            android:layout_centerInParent="true"
+            android:layout_toRightOf="@id/btnAnterior"
+            android:background="@drawable/playbutton_style" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:onClick="onClick"
+            android:layout_toRightOf="@id/btnPlay"
+            android:background="@drawable/nextbutton_style" />
+
+        <Button
+            android:id="@+id/btnRandomize"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:onClick="onClick"
+            android:layout_toRightOf="@id/btnNext"
+            android:background="@drawable/shufflebutton_style" />
+
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="@color/orange">
+
+        <ListView
+            android:id="@+id/LstListadoPL"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/orange" >
+
+        </ListView>
+    </LinearLayout>
+</LinearLayout>

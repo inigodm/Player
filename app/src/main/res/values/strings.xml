@@ -1,5 +1,67 @@
 <resources>
     <string name="app_name">Player</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="archivoconfiguracion">opciones.txt</string>
+    <string name="reproduccionactual">Reproducción actual</string>
+    <string name="reproducirtodo">Reproducir todo</string>
+    <string name="reproducirdirectorio">Reproducir directorio</string>
+    <string name="artistas">Artistas</string>
+    <string name="albums">Albums</string>
+    <string name="playlist">Playlists</string>
+    <string name="opciones">Opciones</string>
+    <string name="duplicados">Duplicados</string>
+    <string name="canciones">Canciones</string>
+    <string name="appname">Reproductor(alfa)</string>
+    <string name="min_size_song">Elige la duracion mínima de las canciones a reproducir</string>
+    <string name="aniadircanciones">Añadir canciones</string>
+    <string name="aniadirartistas">Añadir artistas</string>
+    <string name="aniadiralbums">Añadir albums</string>
+    <string name="aniadirdirectorio">Añadir directorio</string>
+    <string name="eliminarcanciones">Eliminar canciones</string>
+    <string name="aniadirplaylist">Añadir playlist</string>
+    <string name="aniadirtodo">Añadir todo</string>
+    <string name="aniadiendocanciones">Añadiendo canciones</string>
+    <string name="aniadiendoartistas">Añadiendo artistas</string>
+    <string name="aniadiendoalbums">Añadiendo albums</string>
+    <string name="aniadiendoplaylists">Añadiendo playlists</string>
+    <string name="eliminandocanciones">Eliminando canciones</string>
+    <string name="buscandocancionesenbbdd">Buscando canciones en la BBDD</string>
+    <string name="cancionesleidas">Buscando canciones en la BBDD</string>
+    <plurals name="cancionesleidas">
+        <item quantity="one">Leida 1 cancion</item>
+        <item quantity="other">Leidas %d canciones.</item>
+    </plurals>
+    <string name="erroralguardar">Error al salvar las opciones</string>
+    <string-array name="duracionminima">
+        <item>10 segundos</item>
+        <item>20 segundos</item>
+        <item>30 segundos</item>
+        <item>40 segundos</item>
+        <item>50 segundos</item>
+        <item>60 segundos</item>
+    </string-array>
+    <string name="nuevalista">Nueva lista</string>
+    <string name="editarlista">Editar listas</string>
+    <string name="eliminarlista">Eliminar litas</string>
+    <string name="editandolista">Editando listas</string>
+    <string name="eliminandolista">Eliminando listas</string>
+    <string name="introducenombrenuevalista">Introduce un nombre para la nueva lista</string>
+    <string name="nombreinvalido">Nombre invalido</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="actualizaddbb">Resetear BBDD</string>
+    <string name="actualizaddbbdesc">Se borrara la información guardada de todas las canciones, playlist, albums...</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="durminimatext">Duración mínima</string>
+    <string name="durminimalongtext">Para evitar tonos de movil en la lista de reproducción se pueden excluir las canciones por su duracion</string>
+    <string name="currenttimevoid">-:--</string>
+    <string name="separatorvoid"> / </string>
+    <string name="songnamevoid">---</string>
+    <string name="equalizador">Ecualizador</string>
+    <string name="showequalizador">Mostrar EQ</string>
+    <string name="hideequalizador">Ocultar EQ</string>
+    <string name="guion">-</string>
+    <string name="eqon">EQ On</string>
+    <string name="eqoff">EQ Off</string>
+    <string name="bassboost">Bass Boost</string>
 </resources>
