@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import com.inigo.android.os.MediaManager;
 import com.inigo.customItems.Cancion;
 import com.inigo.customexceptions.ServiceException;
+import com.inigo.player.MainActivity;
 import com.inigo.reproductor.ActListadoCancionesAsync;
 
 import android.R;
@@ -114,7 +115,7 @@ public class PlayerService extends Service {
 		Notification notification = new Notification(R.drawable.arrow_down_float, text,
 				System.currentTimeMillis());
 		// Creamos un intent con el ActListadoCancionesAsync pero especificando que si esta creado use el que esta creado
-		Intent i = new Intent(this, ActListadoCancionesAsync.class);
+		Intent i = new Intent(this, MainActivity.class);
 		//i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
 		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| //esto tambien funcionaba...Intent.FLAG_ACTIVITY_NEW_TASK|
 		//		//Intent.FLAG_ACTIVITY_CLEAR_TASK|

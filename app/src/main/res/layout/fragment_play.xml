@@ -105,18 +105,23 @@
             android:background="@drawable/shufflebutton_style" />
 
     </LinearLayout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout
+        android:id="@+id/LstListadoPLLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@color/orange"
         android:orientation="vertical"
-        android:background="@color/orange">
+        android:weightSum="1">
 
         <ListView
             android:id="@+id/LstListadoPL"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/orange" >
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/orange">
 
         </ListView>
     </LinearLayout>
+
+    <include layout="@layout/loading"/>
 </LinearLayout>

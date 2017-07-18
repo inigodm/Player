@@ -4,7 +4,7 @@ package com.inigo.player.models;
  * Created by inigo on 16/07/17.
  */
 
-public class Song {
+public class Song implements TitleSubtitle{
     private String name;
     private String author;
     private String album;
@@ -41,4 +41,8 @@ public class Song {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
+    public String getTitle() {return name;};
+
+    public String getSubtitle() {return new StringBuffer(author).append(" - ").append(album).toString();};
 }
