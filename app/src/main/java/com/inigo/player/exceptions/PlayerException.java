@@ -5,4 +5,7 @@ package com.inigo.player.exceptions;
  */
 
 public class PlayerException extends Exception {
+    public PlayerException(String msg, Exception e){
+        super(msg, e);
+    }
 }

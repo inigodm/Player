@@ -4,13 +4,11 @@
 package services;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
-import com.inigo.android.os.MediaManager;
-import com.inigo.customItems.Cancion;
-import com.inigo.customexceptions.ServiceException;
 import com.inigo.player.MainActivity;
-import com.inigo.reproductor.ActListadoCancionesAsync;
+import com.inigo.player.exceptions.ServiceException;
+import com.inigo.player.models.Song;
 
 import android.R;
 import android.app.Notification;
@@ -31,7 +29,7 @@ import android.util.Log;
  */
 public class PlayerService extends Service {
 	boolean isPlaying = true;
-	static ArrayList<Cancion> playLists = MediaManager.PLAYLISTS;
+	static List<Song> playLists;
 	private final IBinder mBinder = new LocalBinder();
 	boolean notificate = false;
 	//private NotificationManager mNM;
@@ -53,13 +51,6 @@ public class PlayerService extends Service {
 	// Unique Identification Number for the Notification.
 	// We use it on Notification start, and to cancel it.
 	private int NOTIFICATION_ID = 1234;//R.string.local_service_started;
-	
-	/**
-	 * 
-	 */
-	public PlayerService() {
-		//Log.v("service", "contructor");
-	}
 
 	/**
 	 * Clase para que las clases externas accedan al servicio. No tiene nada mas.
@@ -74,7 +65,6 @@ public class PlayerService extends Service {
 	 */
 	@Override
 	public IBinder onBind(Intent arg0) {
-		//Log.v("service", "binded");
 		return mBinder;
 	}
 
@@ -105,12 +95,13 @@ public class PlayerService extends Service {
 	 */
 	@SuppressWarnings("deprecation")
 	private void showNotification(String ticket, String subticket, String text, boolean foreground) {
-		//if (!notificate){
-		//	Log.v("mata","mata noficacion");
-		//	NotificationManager mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);	
-		//	mNM.cancel(NOTIFICATION_ID);
-		//	return;
-		//}
+		Notification noti = new Notification.Builder(this)
+				.setContentTitle(ticket)
+				.setSubText(subticket)
+				.setSmallIcon(R.drawable.arrow_down_float)
+				.build();
+	}
+	private void showNotification(String ticket, String subticket, String text, boolean foreground) {
 		// Set the icon, scrolling text and timestamp
 		Notification notification = new Notification(R.drawable.arrow_down_float, text,
 				System.currentTimeMillis());
