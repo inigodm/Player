@@ -17,18 +17,16 @@ import java.util.function.Function;
 
 public class PlayListLoader extends AsyncTask<String, Song, Void>{
     MainActivity.PlayerFragment playlistFragment;
-    List<TitleSubtitle> datos = new ArrayList<>();
     Runnable runnable;
 
-    public PlayListLoader(MainActivity.PlayerFragment playlistFragment) {
+    public PlayListLoader(MainActivity.PlayerFragment playlistFragment, Runnable runnable) {
         super();
         this.playlistFragment = playlistFragment;
+        this.runnable = runnable;
     }
 
     @Override
     protected Void doInBackground(String... strings) {
-        datos.clear();
-        runnable = new SongsLoader(playlistFragment.getContext(), datos);
         runnable.run();
         return null;
     }
@@ -37,20 +35,12 @@ public class PlayListLoader extends AsyncTask<String, Song, Void>{
     @Override
     protected void onPostExecute(Void o) {
         super.onPostExecute(o);
-        playlistFragment.setData(datos);
+        playlistFragment.refreshPlaylist();
         playlistFragment.setSpinnerVisible(false);
     }
 
     @Override
     protected void onProgressUpdate(Song... values) {
         super.onProgressUpdate(values);
-    }
-
-    public List<TitleSubtitle> getDatos() {
-        return datos;
-    }
-
-    public void setDatos(List<TitleSubtitle> datos) {
-        this.datos = datos;
     }
 }

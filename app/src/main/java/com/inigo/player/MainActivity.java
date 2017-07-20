@@ -24,6 +24,7 @@ import android.widget.ListView;
 
 import com.inigo.player.android.PlayListAdapter;
 import com.inigo.player.logics.tasks.PlayListLoader;
+import com.inigo.player.logics.tasks.playlistload.SongsLoader;
 import com.inigo.player.models.Song;
 import com.inigo.player.models.TitleSubtitle;
 
@@ -88,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
     public static class PlayerFragment extends Fragment {
         View rootView = null;
         PlayListLoader tskPLLoader;
-        List<TitleSubtitle> data;
+        List<TitleSubtitle> datos = new ArrayList<>();
+
         public PlayerFragment() {
         }
 
@@ -106,17 +108,16 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_play, container, false);
-            data = obtainData();
+            obtainData();
             setSpinnerVisible(true);
             //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             return rootView;
         }
 
-        public List<TitleSubtitle> obtainData(){
-
-            tskPLLoader = new PlayListLoader(this);
+        public void obtainData(){
+            datos.clear();
+            tskPLLoader = new PlayListLoader(this, new SongsLoader(this.getContext().getContentResolver(), datos));
             tskPLLoader.execute();
-            return tskPLLoader.getDatos();
         }
 
         public void setSpinnerVisible(boolean spinnerVisible){
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
             playlist.setAdapter(pla);
         }
 
-        public void setData(List<TitleSubtitle> datos) {
+        public void refreshPlaylist() {
             fillPlayList(rootView, datos);
         }
     }

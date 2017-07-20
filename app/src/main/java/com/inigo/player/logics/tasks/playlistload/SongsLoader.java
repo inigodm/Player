@@ -22,71 +22,33 @@ import java.util.List;
 
 public class SongsLoader implements Runnable {
 
-    Context act;
+    ContentResolver cr ;
     List<TitleSubtitle> songs;
 
-    public SongsLoader(Context act, List<TitleSubtitle> songs){
-        this.act = act;
+    public SongsLoader(ContentResolver cr, List<TitleSubtitle> songs){
+        this.cr = cr;
         this.songs = songs;
     }
 
     @Override
     public void run() {
         songs.clear();
-        try {
-            Song song;
-            ContentResolver cr = act.getContentResolver();
-            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
-            //String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
-            Cursor cur = cr.query(uri, null, selection, null, null);
-            int count = 0;
-            if(cur != null)
-            {
-                count = cur.getCount();
+        loadData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media.IS_MUSIC + "!= 0");
+        loadData(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, MediaStore.Audio.Media.IS_MUSIC + "!= 0");
+    }
 
-                if(count > 0)
-                {
-                    while(cur.moveToNext())
-                    {
-                        song = new Song();
-                        song.setName(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-                        song.setAlbum(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
-                        song.setAuthor(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-                        song.setDuration(cur.getInt(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                        songs.add(song);
-                        System.out.print(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    }
-
-                }
-            }
-            cur.close();
-            uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
-            //String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
-            cur = cr.query(uri, null, selection, null, null);
-            count = 0;
-            if(cur != null)
-            {
-                count = cur.getCount();
-
-                if(count > 0)
-                {
-                    while(cur.moveToNext())
-                    {
-                        song = new Song();
-                        song.setName(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-                        song.setAlbum(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
-                        song.setAuthor(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-                        song.setDuration(cur.getInt(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                        songs.add(song);
-                        System.out.print(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
-                    }
-
-                }
-            }
-            cur.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void loadData(Uri uri, String selection){
+        Song song;
+        Cursor cur = cr.query(uri, null, selection, null, null);
+        while(cur.moveToNext()) {
+            song = new Song();
+            song.setName(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+            song.setAlbum(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
+            song.setAuthor(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+            song.setDuration(cur.getInt(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+            song.setPath(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA)));
+            songs.add(song);
         }
+        cur.close();
     }
 }

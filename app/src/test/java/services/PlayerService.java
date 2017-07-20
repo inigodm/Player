@@ -68,16 +68,6 @@ public class PlayerService extends Service {
 		return mBinder;
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.Service#onCreate()
-	 */
-	public void onCreate(){
-		//Log.v("service", "oncreatestart");
-		//mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-		// Display a notification about us starting.  We put an icon in the status bar.
-		//showNotification("Marandina","", "el texto es este", true);
-		//Log.v("service", "oncreateend");
-	}
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		notificate = false;
 		// Estosoluciona un nullpointer exception 
@@ -100,6 +90,8 @@ public class PlayerService extends Service {
 				.setSubText(subticket)
 				.setSmallIcon(R.drawable.arrow_down_float)
 				.build();
+		noti.flags|=Notification.FLAG_FOREGROUND_SERVICE | Notification.FLAG_NO_CLEAR;
+		startForeground(NOTIFICATION_ID, notification);
 	}
 	private void showNotification(String ticket, String subticket, String text, boolean foreground) {
 		// Set the icon, scrolling text and timestamp
