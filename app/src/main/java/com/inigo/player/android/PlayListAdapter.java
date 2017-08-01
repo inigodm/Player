@@ -35,8 +35,8 @@ public class PlayListAdapter extends ArrayAdapter<TitleSubtitle> {
         }
         TitleSubtitle song = getItem(position);
         if (song != null) {
-            TextView title = (TextView) v.findViewById(R.id.LblTitulo);
-            TextView subtitle = (TextView) v.findViewById(R.id.LblSubTitulo);
+            TextView title = v.findViewById(R.id.LblTitulo);
+            TextView subtitle = v.findViewById(R.id.LblSubTitulo);
             if (title != null) {
                 title.setText(song.getTitle());
             }

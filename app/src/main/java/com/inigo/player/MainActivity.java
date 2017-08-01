@@ -2,8 +2,10 @@ package com.inigo.player;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ExpandedMenuView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -17,12 +19,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.inigo.player.android.PlayListAdapter;
+import com.inigo.player.exceptions.ServiceException;
+import com.inigo.player.logics.playservices.MediaManager;
 import com.inigo.player.logics.tasks.PlayListLoader;
 import com.inigo.player.logics.tasks.playlistload.SongsLoader;
 import com.inigo.player.models.Song;
@@ -33,6 +40,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ARG_STRING= "section_string";
+    static MediaManager mm = new MediaManager();
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -90,7 +98,10 @@ public class MainActivity extends AppCompatActivity {
         View rootView = null;
         PlayListLoader tskPLLoader;
         List<TitleSubtitle> datos = new ArrayList<>();
-
+        View selectedView = null;
+        Button pause;
+        Button play;
+        ListView playlist;
         public PlayerFragment() {
         }
 
@@ -108,27 +119,94 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_play, container, false);
-            obtainData();
+            mm.setSongs(initData());
             setSpinnerVisible(true);
-            //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            pause = rootView.findViewById(R.id.btnPause);
+            play = rootView.findViewById(R.id.btnPlay);
+            playlist = rootView.findViewById(R.id.LstListadoPL);
+            play.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mm.play();
+                    setLockAndFeel();
+                }
+            });
+            pause.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    play.setVisibility(View.VISIBLE);
+                    pause.setVisibility(View.GONE);
+                    mm.pause();
+                }
+            });
+            Button stop = rootView.findViewById(R.id.btnStop);
+            stop.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    play.setVisibility(View.VISIBLE);
+                    pause.setVisibility(View.GONE);
+                    mm.stop();
+                }
+            });
+            Button next = rootView.findViewById(R.id.btnNext);
+            next.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mm.play(mm.getIndex() + 1);
+                    setLockAndFeel();
+                }
+            });
+            Button prev = rootView.findViewById(R.id.btnAnterior);
+            prev.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mm.play(mm.getIndex() - 1);
+                    setLockAndFeel();
+                }
+            });
+            final ListView playlist = rootView.findViewById(R.id.LstListadoPL);
+            playlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    int next = adapterView.getPositionForView(view);
+                    mm.play(next);
+                    setLockAndFeel();
+                }
+            });
             return rootView;
         }
 
-        public void obtainData(){
+        private void setLockAndFeel(){
+            //if (selectedView == null){
+            //    selectedView = playlist.getSelectedView();
+            //}
+            //selectedView.setBackgroundColor(Color.YELLOW);
+            //selectedView = playlist.getSelectedView();
+            //selectedView.setBackgroundColor(Color.GREEN);
+            play.setVisibility(View.GONE);
+            pause.setVisibility(View.VISIBLE);
+        }
+        public List<TitleSubtitle> initData(){
             datos.clear();
             tskPLLoader = new PlayListLoader(this, new SongsLoader(this.getContext().getContentResolver(), datos));
             tskPLLoader.execute();
+            return datos;
+        }
+
+        public List<TitleSubtitle> setData(List<TitleSubtitle> newData){
+            datos.clear();
+            datos.addAll(newData);
+            return datos;
         }
 
         public void setSpinnerVisible(boolean spinnerVisible){
-            LinearLayout ll = (LinearLayout)rootView.findViewById(R.id.lytContenedor);
-            LinearLayout playlist = (LinearLayout) rootView.findViewById(R.id.LstListadoPLLayout);
+            LinearLayout ll = rootView.findViewById(R.id.lytContenedor);
+            LinearLayout pl = rootView.findViewById(R.id.LstListadoPLLayout);
             ll.setVisibility(spinnerVisible ? View.VISIBLE : View.GONE);
-            playlist.setVisibility(!spinnerVisible ? View.VISIBLE : View.GONE);
+            pl.setVisibility(!spinnerVisible ? View.VISIBLE : View.GONE);
         }
 
         public void fillPlayList(View rootView, List<TitleSubtitle> datos){
-            ListView playlist = (ListView) rootView.findViewById(R.id.LstListadoPL);
             PlayListAdapter pla = new PlayListAdapter(getContext(), R.id.LstListadoPL, datos);
             playlist.setAdapter(pla);
         }
