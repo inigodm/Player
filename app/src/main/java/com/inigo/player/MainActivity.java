@@ -31,16 +31,17 @@ import com.inigo.player.android.PlayListAdapter;
 import com.inigo.player.exceptions.ServiceException;
 import com.inigo.player.logics.playservices.MediaManager;
 import com.inigo.player.logics.tasks.PlayListLoader;
+import com.inigo.player.logics.tasks.StatusListener;
 import com.inigo.player.logics.tasks.playlistload.SongsLoader;
 import com.inigo.player.models.Song;
+import com.inigo.player.models.Status;
 import com.inigo.player.models.TitleSubtitle;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
     private static final String ARG_STRING= "section_string";
-    static MediaManager mm = new MediaManager();
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -63,8 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        // Create the adapter that will return a fragment for each of sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), new Bundle());
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlayerFragment extends Fragment {
+    public static class PlayerFragment extends Fragment implements StatusListener{
         View rootView = null;
         PlayListLoader tskPLLoader;
         List<TitleSubtitle> datos = new ArrayList<>();
@@ -119,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_play, container, false);
-            mm.setSongs(initData());
+            MediaManager.getInstance().setSongs(initData());
+            MediaManager.getInstance().subscribe(this);
             setSpinnerVisible(true);
             pause = rootView.findViewById(R.id.btnPause);
             play = rootView.findViewById(R.id.btnPlay);
@@ -127,41 +128,34 @@ public class MainActivity extends AppCompatActivity {
             play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mm.play();
-                    setLockAndFeel();
+                    MediaManager.getInstance().play();
                 }
             });
             pause.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    play.setVisibility(View.VISIBLE);
-                    pause.setVisibility(View.GONE);
-                    mm.pause();
+                    MediaManager.getInstance().pause();
                 }
             });
             Button stop = rootView.findViewById(R.id.btnStop);
             stop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    play.setVisibility(View.VISIBLE);
-                    pause.setVisibility(View.GONE);
-                    mm.stop();
+                    MediaManager.getInstance().stop();
                 }
             });
             Button next = rootView.findViewById(R.id.btnNext);
             next.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mm.play(mm.getIndex() + 1);
-                    setLockAndFeel();
+                    MediaManager.getInstance().next();
                 }
             });
             Button prev = rootView.findViewById(R.id.btnAnterior);
             prev.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mm.play(mm.getIndex() - 1);
-                    setLockAndFeel();
+                    MediaManager.getInstance().previous();
                 }
             });
             final ListView playlist = rootView.findViewById(R.id.LstListadoPL);
@@ -169,23 +163,18 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     int next = adapterView.getPositionForView(view);
-                    mm.play(next);
-                    setLockAndFeel();
+                    MediaManager.getInstance().play(next);
                 }
             });
             return rootView;
         }
 
-        private void setLockAndFeel(){
-            //if (selectedView == null){
-            //    selectedView = playlist.getSelectedView();
-            //}
-            //selectedView.setBackgroundColor(Color.YELLOW);
-            //selectedView = playlist.getSelectedView();
-            //selectedView.setBackgroundColor(Color.GREEN);
-            play.setVisibility(View.GONE);
-            pause.setVisibility(View.VISIBLE);
+        @Override
+        public void onUpdatedMediaPlayerStatus(Status status) {
+            play.setVisibility((!status.isPlaying() && !status.isPaused()) ? View.VISIBLE : View.GONE);
+            pause.setVisibility((status.isPlaying() && !status.isPaused()) ? View.VISIBLE : View.GONE);
         }
+
         public List<TitleSubtitle> initData(){
             datos.clear();
             tskPLLoader = new PlayListLoader(this, new SongsLoader(this.getContext().getContentResolver(), datos));

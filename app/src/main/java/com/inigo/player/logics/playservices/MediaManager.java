@@ -3,11 +3,12 @@ package com.inigo.player.logics.playservices;
 import android.media.MediaPlayer;
 import android.util.Log;
 
-import com.inigo.player.exceptions.ServiceException;
+import com.inigo.player.logics.MediaPlayerObserver;
+import com.inigo.player.logics.tasks.StatusListener;
+import com.inigo.player.models.Status;
 import com.inigo.player.models.Song;
 import com.inigo.player.models.TitleSubtitle;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,34 @@ import java.util.List;
  * Created by inigo on 19/07/17.
  */
 
-public class MediaManager {
+public class MediaManager extends MediaPlayerObserver {
     MediaPlayer MP = new MediaPlayer();
-    boolean isPlaying = false;
     List<TitleSubtitle> songs = new ArrayList<>();
     int index = 0;
+    private static MediaManager MANAGER;
+
+    /**
+     * Singleton. This class must be unique because there will be only one MediaPlayer
+     * and only one list of songs to play
+     * @return
+     */
+    private MediaManager(Status ps){
+        this.status = ps;
+    }
+
+    public static MediaManager getInstance(Status ps){
+        if (MANAGER == null){
+            MANAGER = new MediaManager(ps);
+        }
+        return MANAGER;
+    }
+
+    public static MediaManager getInstance(){
+        if (MANAGER == null){
+            MANAGER = new MediaManager(new Status());
+        }
+        return MANAGER;
+    }
 
     public void play(int songIndex){
         setNextSong(songIndex);
@@ -31,7 +55,7 @@ public class MediaManager {
      */
     public void play(){
         try {
-            if (!isPlaying){
+            if (!status.isPlaying()){
                 String absfilename = ((Song)(songs.get(index))).getPath();
                 MP.reset();
                 MP.setDataSource(absfilename);
@@ -39,8 +63,8 @@ public class MediaManager {
             }
             if (songs.size() > 0) {
                 MP.start();
-                isPlaying = true;
                 MP.setOnCompletionListener(new GoToNextOnCompletionListener());
+                status.setPlaying(true);
             }
         } catch (IllegalStateException e) {
             e.printStackTrace();
@@ -51,38 +75,42 @@ public class MediaManager {
     }
 
     public void stop() {
-        if (isPlaying) {
+        if (status.isPlaying()) {
             MP.stop();
-            Log.w(getClass().getName(), "Got to stop()!");
-            isPlaying=false;
+            status.setPlaying(false);
         }
     }
 
     public void pause(){
         MP.pause();
+        status.setPaused(true);
     }
 
-    public void playNext(){
+    public void next(){
         setNextSong(index + 1);
         stop();
         play();
     }
 
-    public void playPrevious() {
-        if (!isPlaying){
+    public void previous() {
+        if (!status.isPlaying()){
             setNextSong(index -1);
         }
         stop();
         play();
     }
 
+    public void invertPauseOrPlay(){
+        if (status.isPlaying()){
+            pause();
+        }else{
+            play();
+        }
+    }
+
     public void setSongs(List<TitleSubtitle> songs) {
         this.songs = songs;
         this.index = 0;
-    }
-
-    public boolean isPlaying() {
-        return isPlaying;
     }
 
     private void setNextSong(int next) {
@@ -96,10 +124,13 @@ public class MediaManager {
     public int getIndex(){
         return index;
     }
+    public boolean isPlaying() {
+        return status.isPlaying();
+    }
 
     class GoToNextOnCompletionListener implements MediaPlayer.OnCompletionListener {
         public void onCompletion(MediaPlayer mp) {
-            MediaManager.this.playNext();
+            MediaManager.this.next();
         }
     }
 }
