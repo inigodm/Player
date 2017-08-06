@@ -39,22 +39,22 @@ public class ExampleInstrumentedTest {
     public void testMediaManager() throws Exception {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
-        MediaManager mm = new MediaManager();
+        MediaManager mm = MediaManager.getInstance();
         List<TitleSubtitle> songs = new ArrayList<>();
         mm.setSongs(songs);
-        mm.start();
+        mm.play();
         assertFalse(mm.isPlaying());
         SongsLoader sl = new SongsLoader(appContext.getContentResolver(), songs);
         sl.run();
-        mm.start();
+        mm.play();
         assertTrue(mm.isPlaying());
         mm.stop();
         assertFalse(mm.isPlaying());
-        mm.start();
+        mm.play();
         assertTrue(mm.isPlaying());
         mm.pause();
         assertTrue(mm.isPlaying());
-        mm.playNext();
+        mm.next();
         assertTrue(mm.isPlaying());
     }
 }
