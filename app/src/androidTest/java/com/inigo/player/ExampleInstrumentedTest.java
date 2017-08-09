@@ -1,13 +1,12 @@
 package com.inigo.player;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.inigo.player.async.tasks.PlayListLoader;
 import com.inigo.player.logics.playservices.MediaManager;
-import com.inigo.player.logics.tasks.playlistload.SongsLoader;
-import com.inigo.player.models.TitleSubtitle;
+import com.inigo.player.models.Song;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,9 +28,9 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
         assertEquals("com.inigo.player", appContext.getPackageName());
-        List<TitleSubtitle> songs = new ArrayList<>();
-        SongsLoader sl = new SongsLoader(appContext.getContentResolver(), songs);
-        sl.run();
+        List<Song> songs = new ArrayList<>();
+        PlayListLoader sl = new PlayListLoader(appContext.getContentResolver(), songs);
+        sl.doInBackground("");
         assertTrue(songs.size() > 0);
     }
 
@@ -40,12 +39,12 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
         MediaManager mm = MediaManager.getInstance();
-        List<TitleSubtitle> songs = new ArrayList<>();
+        List<Song> songs = new ArrayList<>();
         mm.setSongs(songs);
         mm.play();
         assertFalse(mm.isPlaying());
-        SongsLoader sl = new SongsLoader(appContext.getContentResolver(), songs);
-        sl.run();
+        PlayListLoader sl = new PlayListLoader(appContext.getContentResolver(), songs);
+        sl.doInBackground("");
         mm.play();
         assertTrue(mm.isPlaying());
         mm.stop();

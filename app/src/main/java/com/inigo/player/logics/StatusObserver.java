@@ -1,4 +1,4 @@
-package com.inigo.player.logics.tasks;
+package com.inigo.player.logics;
 
 import com.inigo.player.models.Status;
 

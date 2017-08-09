@@ -6,7 +6,7 @@ package services;
 import java.io.IOException;
 import java.util.List;
 
-import com.inigo.player.MainActivity;
+import com.inigo.player.activities.MainActivity;
 import com.inigo.player.exceptions.ServiceException;
 import com.inigo.player.models.Song;
 
@@ -85,13 +85,21 @@ public class PlayerService extends Service {
 	 */
 	@SuppressWarnings("deprecation")
 	private void showNotification(String ticket, String subticket, String text, boolean foreground) {
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+				intent, 0);
 		Notification noti = new Notification.Builder(this)
+				.setTicker("This is ticker")
 				.setContentTitle(ticket)
-				.setSubText(subticket)
+				.setContentTitle(subticket)
+				.setSubText("subtexto ")
+				.setOngoing(true)
+				.setContentIntent(contentIntent)
 				.setSmallIcon(R.drawable.arrow_down_float)
 				.build();
 		noti.flags|=Notification.FLAG_FOREGROUND_SERVICE | Notification.FLAG_NO_CLEAR;
-		startForeground(NOTIFICATION_ID, notification);
+		startForeground(NOTIFICATION_ID, noti);
 	}
 	private void showNotification(String ticket, String subticket, String text, boolean foreground) {
 		// Set the icon, scrolling text and timestamp

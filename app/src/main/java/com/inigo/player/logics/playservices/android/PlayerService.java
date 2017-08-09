@@ -60,7 +60,8 @@ public class PlayerService extends Service {
                 .setSubText(subticket)
                 .setSmallIcon(android.R.drawable.arrow_down_float)
                 .build();
-        noti.flags|=Notification.FLAG_FOREGROUND_SERVICE | Notification.FLAG_NO_CLEAR;
+        noti.flags |= Notification.FLAG_FOREGROUND_SERVICE | Notification.FLAG_NO_CLEAR;
+        //Por que se manda la notificacion desde el servicio y no desde un contexto?
         startForeground(NOTIFICATION_ID, noti);
     }
 

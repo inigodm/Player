@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.inigo.player.R;
-import com.inigo.player.models.TitleSubtitle;
+import com.inigo.player.models.Song;
 
 import java.util.List;
 
@@ -16,12 +16,12 @@ import java.util.List;
  * Created by inigo on 17/07/17.
  */
 
-public class PlayListAdapter extends ArrayAdapter<TitleSubtitle> {
+public class PlayListAdapter extends ArrayAdapter<Song> {
     public PlayListAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
 
-    public PlayListAdapter(Context context, int resource, List<TitleSubtitle> songs) {
+    public PlayListAdapter(Context context, int resource, List<Song> songs) {
         super(context, resource, songs);
     }
 
@@ -33,7 +33,7 @@ public class PlayListAdapter extends ArrayAdapter<TitleSubtitle> {
             vi = LayoutInflater.from(getContext());
             v = vi.inflate(R.layout.playlist_item, null);
         }
-        TitleSubtitle song = getItem(position);
+        Song song = getItem(position);
         if (song != null) {
             TextView title = v.findViewById(R.id.LblTitulo);
             TextView subtitle = v.findViewById(R.id.LblSubTitulo);

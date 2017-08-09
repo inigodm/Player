@@ -1,40 +1,53 @@
-package com.inigo.player.logics.tasks.playlistload;
+package com.inigo.player.async.tasks;
 
-import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.Context;
-import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.provider.Settings;
 
+import com.inigo.player.activities.MainActivity;
+import com.inigo.player.fragments.PlayerFragment;
 import com.inigo.player.models.Song;
-import com.inigo.player.models.TitleSubtitle;
 
-import java.io.Console;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by inigo on 19/07/17.
  */
 
-public class SongsLoader implements Runnable {
-
+public class PlayListLoader extends AsyncTask<String, Song, Void>{
+    PlayerFragment playlistFragment;
     ContentResolver cr ;
-    List<TitleSubtitle> songs;
+    List<Song> songs;
 
-    public SongsLoader(ContentResolver cr, List<TitleSubtitle> songs){
+    public PlayListLoader(PlayerFragment playlistFragment, List<Song> songs) {
+        super();
+        this.playlistFragment = playlistFragment;
+        this.cr = playlistFragment.getContext().getContentResolver();
+        this.songs = songs;
+    }
+
+    public PlayListLoader(ContentResolver cr, List<Song> songs) {
+        super();
         this.cr = cr;
         this.songs = songs;
     }
 
     @Override
-    public void run() {
+    public Void doInBackground(String... strings) {
         songs.clear();
         loadData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media.IS_MUSIC + "!= 0");
         loadData(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, MediaStore.Audio.Media.IS_MUSIC + "!= 0");
+        return null;
+    }
+
+
+    @Override
+    protected void onPostExecute(Void o) {
+        super.onPostExecute(o);
+        playlistFragment.refreshPlaylist();
+        playlistFragment.setSpinnerVisible(false);
     }
 
     private void loadData(Uri uri, String selection){
@@ -50,5 +63,10 @@ public class SongsLoader implements Runnable {
             songs.add(song);
         }
         cur.close();
+    }
+
+    @Override
+    protected void onProgressUpdate(Song... values) {
+        super.onProgressUpdate(values);
     }
 }

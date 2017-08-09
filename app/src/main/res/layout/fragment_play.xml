@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/orange"
-    tools:context="com.inigo.player.MainActivity$QuestionFragment">
+    tools:context="com.inigo.player.activities.MainActivity$QuestionFragment">
 
     <TextView
         android:id="@+id/section_label"
