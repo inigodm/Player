@@ -31,6 +31,7 @@ public class MediaManager extends Service {
     protected Status status;
     private final IBinder mBinder = new LocalBinder();
     private int NOTIFICATION_ID = 1234;
+    private static final int SECS_TO_NOT_PREVIOUS = 3000;
 
     /**
      * Singleton. This class must be unique because there will be only one MediaPlayer
@@ -129,10 +130,13 @@ public class MediaManager extends Service {
     }
 
     private void setNextSong(int next) {
-        if ((next > songs.size() - 1) || (next < 0)){
-            index = 0;
-        }else{
-            index = next;
+        // only change the song if we are in the first 3 seconds
+        if (MP.getCurrentPosition() > SECS_TO_NOT_PREVIOUS){
+            if ((next > songs.size() - 1) || (next < 0)){
+                index = 0;
+            }else{
+                index = next;
+            }
         }
     }
 
