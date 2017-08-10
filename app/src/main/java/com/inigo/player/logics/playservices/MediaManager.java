@@ -92,10 +92,8 @@ public class MediaManager extends Service {
     }
 
     public void stop() {
-        if (status.isPlaying()) {
-            MP.stop();
-            status.setPlaying(false);
-        }
+        MP.stop();
+        status.setPlaying(false);
     }
 
     public void pause(){
