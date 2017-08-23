@@ -22,6 +22,12 @@ import com.inigo.player.models.Status;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.Unbinder;
+
 /**
      * A placeholder fragment containing a simple view.
      */
@@ -29,14 +35,13 @@ import java.util.List;
         View rootView = null;
         PlayListLoader tskPLLoader;
         List<Song> datos = new ArrayList<>();
-        Button pause;
-        Button play;
-        ListView playlist;
-        TextView songName;
-        TextView duration;
-        TextView current;
-        public PlayerFragment() {
-        }
+        @BindView(R.id.btnPause) Button pause;
+        @BindView(R.id.btnPlay)Button play;
+        @BindView(R.id.LstListadoPL)ListView playlist;
+        @BindView(R.id.lblSongName)TextView songName;
+        @BindView(R.id.lblTotalTime)TextView duration;
+        @BindView(R.id.lblCurrentTime)TextView current;
+        private Unbinder unbinder;
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -52,57 +57,46 @@ import java.util.List;
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_play, container, false);
+            unbinder = ButterKnife.bind(this, rootView);
             MediaManager.getInstance().setSongs(initData());
             MediaManager.getInstance().subscribe(this);
             setSpinnerVisible(true);
-            pause = rootView.findViewById(R.id.btnPause);
-            play = rootView.findViewById(R.id.btnPlay);
-            playlist = rootView.findViewById(R.id.LstListadoPL);
-            songName = rootView.findViewById(R.id.lblSongName);
-            duration = rootView.findViewById(R.id.lblTotalTime);
-            current = rootView.findViewById(R.id.lblCurrentTime);
-            play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MediaManager.getInstance().play();
-                }
-            });
-            pause.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MediaManager.getInstance().pause();
-                }
-            });
-            Button stop = rootView.findViewById(R.id.btnStop);
-            stop.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MediaManager.getInstance().stop();
-                }
-            });
-            Button next = rootView.findViewById(R.id.btnNext);
-            next.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MediaManager.getInstance().next();
-                }
-            });
-            Button prev = rootView.findViewById(R.id.btnAnterior);
-            prev.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    MediaManager.getInstance().previous();
-                }
-            });
-            final ListView playlist = rootView.findViewById(R.id.LstListadoPL);
-            playlist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    int next = adapterView.getPositionForView(view);
-                    MediaManager.getInstance().play(next);
-                }
-            });
             return rootView;
+        }
+
+        @Override public void onDestroyView() {
+            super.onDestroyView();
+            unbinder.unbind();
+        }
+
+        @OnItemClick(R.id.LstListadoPL)
+        public void onItemClick(int next ){
+            MediaManager.getInstance().play(next);
+        }
+
+        @OnClick(R.id.btnPlay)
+        public void play(){
+            MediaManager.getInstance().play();
+        }
+
+        @OnClick(R.id.btnPause)
+        public void pause(){
+            MediaManager.getInstance().pause();
+        }
+
+        @OnClick(R.id.btnStop)
+        public void stop(){
+            MediaManager.getInstance().stop();
+        }
+
+        @OnClick(R.id.btnNext)
+        public void next(){
+            MediaManager.getInstance().next();
+        }
+
+        @OnClick(R.id.btnAnterior)
+        public void previous(){
+            MediaManager.getInstance().previous();
         }
 
         @Override
@@ -134,4 +128,5 @@ import java.util.List;
         }
 
         public void refreshPlaylist() { fillPlayList(datos); }
+
     }
