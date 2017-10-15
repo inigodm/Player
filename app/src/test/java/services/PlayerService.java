@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.inigo.player.activities.MainActivity;
 import com.inigo.player.exceptions.ServiceException;
-import com.inigo.player.models.Song;
 
 import android.R;
 import android.app.Notification;

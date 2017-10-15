@@ -10,11 +10,10 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.inigo.player.R;
 import com.inigo.player.activities.MainActivity;
 import com.inigo.player.logics.StatusListener;
-import com.inigo.player.models.Status;
 import com.inigo.player.models.Song;
+import com.inigo.player.models.Status;
 
 import java.util.ArrayList;
 import java.util.List;

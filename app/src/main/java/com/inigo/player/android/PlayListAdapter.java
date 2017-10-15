@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.inigo.player.R;
-import com.inigo.player.models.Song;
 
 import java.util.List;
 

@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 
-import com.inigo.player.activities.MainActivity;
 import com.inigo.player.fragments.PlayerFragment;
 import com.inigo.player.models.Song;
 
@@ -54,7 +53,12 @@ public class PlayListLoader extends AsyncTask<String, Song, Void>{
         Song song;
         Cursor cur = cr.query(uri, null, selection, null, null);
         while(cur.moveToNext()) {
-            song = new Song();
+            (val name: String, val author: Int,
+                    val album_id: Int, val duration: Int,
+                    val path: String, val id: Int)
+
+            song = new Song(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE),
+                    cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE));
             song.setName(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
             song.setAlbum(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
             song.setAuthor(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));

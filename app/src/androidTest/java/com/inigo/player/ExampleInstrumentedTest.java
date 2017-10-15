@@ -6,7 +6,6 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.inigo.player.async.tasks.PlayListLoader;
 import com.inigo.player.logics.playservices.MediaManager;
-import com.inigo.player.models.Song;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
