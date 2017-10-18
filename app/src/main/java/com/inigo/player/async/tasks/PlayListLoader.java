@@ -15,50 +15,24 @@ import java.util.List;
  * Created by inigo on 19/07/17.
  */
 
-public class PlayListLoader extends AsyncTask<String, Song, Void>{
+public class PlayListLoader{
     PlayerFragment playlistFragment;
     ContentResolver cr ;
     List<Song> songs;
 
-    public PlayListLoader(PlayerFragment playlistFragment, List<Song> songs) {
-        super();
-        this.playlistFragment = playlistFragment;
-        this.cr = playlistFragment.getContext().getContentResolver();
-        this.songs = songs;
-    }
-
-    public PlayListLoader(ContentResolver cr, List<Song> songs) {
-        super();
-        this.cr = cr;
-        this.songs = songs;
-    }
-
-    @Override
-    public Void doInBackground(String... strings) {
+    public static List<Song> loadSongs(ContentResolver cr, List<Song> songs) {
         songs.clear();
-        loadData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media.IS_MUSIC + "!= 0");
-        loadData(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, MediaStore.Audio.Media.IS_MUSIC + "!= 0");
-        return null;
+        loadData(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media.IS_MUSIC + "!= 0", cr, songs);
+        loadData(MediaStore.Audio.Media.INTERNAL_CONTENT_URI, MediaStore.Audio.Media.IS_MUSIC + "!= 0", cr, songs);
+        return songs;
     }
 
 
-    @Override
-    protected void onPostExecute(Void o) {
-        super.onPostExecute(o);
-        playlistFragment.refreshPlaylist();
-        playlistFragment.setSpinnerVisible(false);
-    }
-
-    private void loadData(Uri uri, String selection){
+    private static void loadData(Uri uri, String selection, ContentResolver cr, List<Song> songs){
         Song song;
         Cursor cur = cr.query(uri, null, selection, null, null);
         while(cur.moveToNext()) {
-            (val name: String, val author: Int,
-                    val album_id: Int, val duration: Int,
-                    val path: String, val id: Int)
-
-            song = new Song(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE),
-                    cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE));
+            song = new Song();
             song.setName(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE)));
             song.setAlbum(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
             song.setAuthor(cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
@@ -67,10 +41,5 @@ public class PlayListLoader extends AsyncTask<String, Song, Void>{
             songs.add(song);
         }
         cur.close();
-    }
-
-    @Override
-    protected void onProgressUpdate(Song... values) {
-        super.onProgressUpdate(values);
     }
 }

@@ -1,6 +1,6 @@
 package com.inigo.player.fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +26,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.Unbinder;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
      * A placeholder fragment containing a simple view.
@@ -57,6 +60,7 @@ import butterknife.Unbinder;
                                  Bundle savedInstanceState) {
             rootView = inflater.inflate(R.layout.fragment_play, container, false);
             unbinder = ButterKnife.bind(this, rootView);
+            playlist = rootView.findViewById(R.id.LstListadoPL);
             MediaManager.getInstance().setSongs(initData());
             MediaManager.getInstance().subscribe(this);
             setSpinnerVisible(true);
@@ -109,10 +113,31 @@ import butterknife.Unbinder;
 
         public List<Song> initData(){
             datos.clear();
-            tskPLLoader = new PlayListLoader(this, datos);
-            tskPLLoader.execute();
+            Observable<List<Song>> observableSongs = createObservableSongs();
+            observableSongs
+                    .observeOn(Schedulers.io())
+                    .map((songs) -> {
+                        if (songs == null || songs.isEmpty()) {
+                            datos = PlayListLoader.loadSongs(PlayerFragment.this.getContext().getContentResolver(), datos);
+                        } else {
+                            datos.clear();
+                            datos.addAll(songs);
+                        }
+                        return datos;
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe((res) -> {
+                        fillPlayList(datos);
+                        setSpinnerVisible(false);
+                    });
             return datos;
         }
+
+    public Observable<List<Song>> createObservableSongs() {
+        return Observable.create((emitter) -> {
+            emitter.onNext(datos);
+        });
+    }
 
         public void setSpinnerVisible(boolean spinnerVisible){
             LinearLayout ll = rootView.findViewById(R.id.lytContenedor);

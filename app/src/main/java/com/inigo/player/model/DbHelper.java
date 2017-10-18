@@ -84,25 +84,25 @@ public class DbHelper extends SQLiteOpenHelper {
                     "CREATE TABLE IF NOT EXISTS "
                             + ALBUM_TABLE_NAME + "("
                             + ALBUM_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                            + ALBUM_COLUMN_NAME + " VARCHAR"
+                            + ALBUM_COLUMN_NAME + " VARCHAR)"
             );
             db.execSQL(
                     "CREATE TABLE IF NOT EXISTS "
                             + ARTIST_TABLE_NAME + "("
                             + ARTIST_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                            + ARTIST_COLUMN_NAME + " VARCHAR"
+                            + ARTIST_COLUMN_NAME + " VARCHAR)"
             );
             db.execSQL(
                     "CREATE TABLE IF NOT EXISTS "
                             + PLAYLIST_TABLE_NAME + "("
                             + PLAYLIST_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                            + PLAYLIST_COLUMN_NAME + " VARCHAR"
+                            + PLAYLIST_COLUMN_NAME + " VARCHAR)"
             );
             db.execSQL(
                     "CREATE TABLE IF NOT EXISTS "
                             + PLAYLISTSONG_TABLE_NAME + "("
                             + PLAYLISTSONG_COLUMN_ID_PLAYLIST + " INTEGER PRIMARY, "
-                            + PLAYLISTSONG_COLUMN_ID_SONG + " INTEGER"
+                            + PLAYLISTSONG_COLUMN_ID_SONG + " INTEGER)"
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -132,13 +132,13 @@ public class DbHelper extends SQLiteOpenHelper {
         public List<Song> apply(Cursor cursor) {
             List<Song> res = null;
             while (cursor.moveToNext()){
-                Song song = new Song(
-                        cursor.getString(cursor.getColumnIndex(SONG_COLUMN_NAME)),
-                        cursor.getInt(cursor.getColumnIndex(SONG_COLUMN_DURATION)),
-                        cursor.getString(cursor.getColumnIndex(SONG_COLUMN_PATH)),
-                        cursor.getInt(cursor.getColumnIndex(SONG_COLUMN_ID)),
+                Song song = new Song();
+                song.setName(cursor.getString(cursor.getColumnIndex(SONG_COLUMN_NAME)))
+                        .setDuration(cursor.getInt(cursor.getColumnIndex(SONG_COLUMN_DURATION)))
+                        .setPath(cursor.getString(cursor.getColumnIndex(SONG_COLUMN_PATH)));
+                       /* cursor.getInt(cursor.getColumnIndex(SONG_COLUMN_ID)),
                         cursor.getInt(cursor.getColumnIndex(SONG_COLUMN_ID_AUTHOR)),
-                        cursor.getInt(cursor.getColumnIndex(SONG_COLUMN_ID_ALBUM)), "", "");
+                        cursor.getInt(cursor.getColumnIndex(SONG_COLUMN_ID_ALBUM)), "", "");*/
                 res.add(song);
             }
             return res;

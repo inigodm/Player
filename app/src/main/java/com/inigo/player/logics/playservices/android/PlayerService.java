@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.inigo.player.exceptions.ServiceException;
+import com.inigo.player.models.Song;
 
 import java.io.IOException;
 

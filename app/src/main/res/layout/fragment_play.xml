@@ -83,7 +83,6 @@
             android:id="@+id/btnPlay"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:onClick="onClick"
             android:layout_centerInParent="true"
             android:layout_toRightOf="@id/btnAnterior"
             android:background="@drawable/playbutton_style" />
@@ -109,7 +108,6 @@
             android:id="@+id/btnRandomize"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:onClick="onClick"
             android:layout_toRightOf="@id/btnNext"
             android:background="@drawable/shufflebutton_style" />
 

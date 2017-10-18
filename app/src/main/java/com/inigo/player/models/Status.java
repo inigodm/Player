@@ -16,7 +16,7 @@ public class Status extends StatusObserver{
     }
 
     public Status(){
-        this.song = Song.buildDummieSong();
+        this.song = new Song();
     }
 
     public Song getSong() {
@@ -25,7 +25,7 @@ public class Status extends StatusObserver{
 
     public void setSong(Song s) {
         if (s == null){
-            s = Song.buildDummieSong();
+            s = new Song();
         }
         this.song = s;
     }

@@ -4,10 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.inigo.player.R;
+import com.inigo.player.logics.playservices.MediaManager;
+import com.inigo.player.models.Song;
 
 import java.util.List;
 
